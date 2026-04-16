@@ -3,9 +3,16 @@ import validator from "validator";
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, "first Name is required"],
+      trim: true,
+      minlength: [2, "Name must be at least 2 characters"],
+      maxlength: [50, "Name cannot exceed 50 characters"],
+    },
+    lastName: {
+      type: String,
+      required: [true, "last Name is required"],
       trim: true,
       minlength: [2, "Name must be at least 2 characters"],
       maxlength: [50, "Name cannot exceed 50 characters"],
@@ -26,15 +33,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters"],
+      minlength: [4, "Password must be at least 4 characters"],
       validate: {
         validator: (value) =>
           validator.isStrongPassword(value, {
-            minLength: 6,
-            minLowercase: 1,
-            minUppercase: 1,
-            minNumbers: 1,
-            minSymbols: 0,
+            minLength: 4,
           }),
         message: "Password must contain uppercase, lowercase and a number",
       },
