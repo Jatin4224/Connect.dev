@@ -1,15 +1,14 @@
-import validateSignupData from "../config/validate.js";
+import { validateSignupData } from "../config/validate.js";
 import User from "../models/auth.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-// SIGNUP
+
 export const signup = async (req, res) => {
   try {
     validateSignupData(req);
 
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, age, gender } = req.body;
 
-    // check duplicate user
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -26,6 +25,8 @@ export const signup = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
+      age,
+      gender,
     });
 
     await user.save();
@@ -40,7 +41,6 @@ export const signup = async (req, res) => {
   }
 };
 
-// LOGIN
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -66,6 +66,19 @@ export const login = async (req, res) => {
     res.cookie("token", token);
     return res.status(200).json({
       message: "Login successful",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({
+      message: "Logged out successfully",
     });
   } catch (error) {
     return res.status(500).json({

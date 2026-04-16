@@ -1,6 +1,6 @@
 import validator from "validator";
 
-const validateSignupData = (req) => {
+export const validateSignupData = (req) => {
   const { firstName, lastName, email, password } = req.body;
 
   if (!firstName || !lastName || !email || !password) {
@@ -28,4 +28,16 @@ const validateSignupData = (req) => {
   return true;
 };
 
-export default validateSignupData;
+export const validateprofileEdit = (req) => {
+  const allowedEdit = ["firstName", "lastName", "age", "gender"];
+
+  const updates = Object.keys(req.body);
+
+  const isValid = updates.every((field) => allowedEdit.includes(field));
+
+  if (!isValid) {
+    throw new Error("Invalid updates!");
+  }
+
+  return true;
+};

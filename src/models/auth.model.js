@@ -42,6 +42,12 @@ const userSchema = new mongoose.Schema(
         message: "Password must contain uppercase, lowercase and a number",
       },
     },
+    age: {
+      type: Number,
+    },
+    gender: {
+      type: String,
+    },
   },
   {
     timestamps: true,
